@@ -36,6 +36,7 @@ exports.create_message_post= [
             script: req.body.script
         });
 
+        ///for preliminary testing purposes, comment this out until user creation exists
         if(!errors.isEmpty()) {
             User.find({}, 'name')
             .exec(function(err, results) {
@@ -104,9 +105,8 @@ exports.edit_message_post= [
             return;
         }
         else {
-        message.save(function (err) {
+        Message.findByIdAndUpdate(req.params.id, message, {}, function(err, newmessage) {
             if(err) {return next(err); }
-
             res.redirect('/');
         }); 
     }

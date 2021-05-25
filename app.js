@@ -22,6 +22,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+
+/* start going thru passport creation and mongodb syncing, comment out other code if need be to test on browser*/
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
