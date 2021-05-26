@@ -2,7 +2,7 @@ var User = require('../models/user');
 var Message = require('../models/message');
 var mongoose = require('mongoose');
 const { body,validationResult } = require('express-validator');
-
+/*
 
 //show user signup page //get
 exports.sign_up_get("/sign-up", (req, res, next) => {
@@ -54,3 +54,4 @@ exports.become_an_admin('/become-an-admin', (req,res,next) => {
     }
 })
 
+*/

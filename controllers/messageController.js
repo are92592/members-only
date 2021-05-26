@@ -3,7 +3,7 @@ var Message = require('../models/message');
 var mongoose = require('mongoose');
 const { body,validationResult } = require('express-validator');
 
-
+/*
 exports.index = function(req, res, next) {
     Message.find({}, 'date_and_time user title script')
     .populate('user')
@@ -119,3 +119,4 @@ exports.edit_message_post= [
 //exports.edit_message_post('')
 
 //delete messsage 
+*/
