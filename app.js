@@ -11,6 +11,7 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const user = require('./models/user');
 
 const mongoDb = 'mongodb+srv://erhartica:Edmunds5@cluster0.neybr.mongodb.net/local_library?retryWrites=true&w=majority';
 mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true});
@@ -18,13 +19,16 @@ const db = mongoose.connection;
 
 db.on("error", console.error.bind(console, "mongo connection error"));
 
-const User = mongoose.model(
+/*const User = mongoose.model(
   "User",
   new Schema({
     username: {type: String, required: true},
     password: { type: String, required: true}
   })
-);
+);*/
+
+const User = user;
+
 const app = express();
 /*app.set('views', __dirname);
 app.set("view engine", "ejs");*/
@@ -40,6 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+//app.use('/', user);
 
 app.use(session({secret: "cats", resave: false, saveUninitialized: true}));
 
@@ -93,10 +98,11 @@ app.get("/sign-up", (req, res) =>
 
 
 app.post("/sign-up", (req,res, next) => {
-  bcrypt.hash(req,body.password, 10, (err, hashedPassword) => {
+  bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
     const user = new User({
       username: req.body.username,
       password: hashedPassword,
+      membership_status: "silver",
     }).save(err => {
       if(err) {
         return next(err);
@@ -106,6 +112,10 @@ app.post("/sign-up", (req,res, next) => {
   });
 });
 //var app = express();
+
+app.get("/log-in", (req, res) => {
+  res.render("log-in");
+});
 
 // view engine setup
 app.post(
@@ -123,7 +133,7 @@ app.get("/log-out", (req,res) => {
 
 
 let port = 3000;
-let host = localhost;
+let host = "localhost";
 
 app.listen(port, host, () => console.log("app listening on "+ host + ":" + port));
 
