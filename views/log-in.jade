@@ -4,12 +4,12 @@ block content
   h1= message
   body  
     if user
-      h1= "welcome back" + user
+      h1 Welcome back #{user.username}
       a(href="/log-out") Log Out
     else    
-      h1="Please log in"
+      h1 Please log in
 
-      form(method='POST' action='')
+      form(method='POST' action='log-in')
         div.form-group
           label(for='username') Username:
           input#title.form-control(type='text', placeholder='Username' name='username' required='true' value=(undefined===username ? '' :  user.username) )
@@ -17,7 +17,7 @@ block content
           label(for='password') Password:
           input#title.form-control(type='text', placeholder='Password' name='password' required='true' value=(undefined===password ? '' : user.password) )
         
-       button.btn.btn-primary(type='submit') Submit
+        button.btn.btn-primary(type='submit') Submit
 
       if errors
         ul

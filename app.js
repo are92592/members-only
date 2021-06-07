@@ -8,9 +8,10 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const bcrypt = require("bcryptjs");
+//const bcrypt = require("bcryptjs");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var boardRouter = require('./routes/messageboard');
 const user = require('./models/user');
 
 const mongoDb = 'mongodb+srv://erhartica:Edmunds5@cluster0.neybr.mongodb.net/local_library?retryWrites=true&w=majority';
@@ -29,7 +30,7 @@ db.on("error", console.error.bind(console, "mongo connection error"));
 
 const User = user;
 
-const app = express();
+var app = express();
 /*app.set('views', __dirname);
 app.set("view engine", "ejs");*/
 
@@ -42,9 +43,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-//app.use('/', user);
+//app.use('/', indexRouter);
+//app.use('/users', usersRouter);
+app.use('/messageboard', boardRouter);
 
 app.use(session({secret: "cats", resave: false, saveUninitialized: true}));
 
@@ -93,11 +94,18 @@ app.get("/", (req,res) => {
   res.render("index", { user: req.user });
 });
 
+app.get("/log-in", (req,res) => {
+  res.render("log-in", { user: req.user });
+});
+
+
+/*
 app.get("/sign-up", (req, res) => 
   res.render("sign-up"));
+*/
 
-
-app.post("/sign-up", (req,res, next) => {
+///consider putting this in as a user controller
+/*app.post("/sign-up", (req,res, next) => {
   bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
     const user = new User({
       username: req.body.username,
@@ -110,12 +118,12 @@ app.post("/sign-up", (req,res, next) => {
       res.redirect("/");
     });
   });
-});
+});*/
 //var app = express();
-
+/*
 app.get("/log-in", (req, res) => {
   res.render("log-in");
-});
+});*/
 
 // view engine setup
 app.post(

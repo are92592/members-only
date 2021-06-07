@@ -16,6 +16,7 @@
     "epxress": "0.0.1-security",
     "express": "^4.16.4",
     "express-session": "^1.17.2",
+    "express-validator": "^6.11.1",
     "http-errors": "~1.6.3",
     "jade": "^1.11.0",
     "mongoose": "^5.12.7",
