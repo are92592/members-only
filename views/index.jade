@@ -1,6 +1,15 @@
 extends layout
 
 block content
-  if user
-    h1 Welcome Back #{user.username}
-  p Welcome to #{title}
+  h1= message
+  body
+    p Welcome to #{title}
+    if user
+      h1 Welcome back #{user.username}
+      a(href="/log-out") Log Out
+    else    
+      a(href="/messageboard/log-in") Log in
+
+  each message in message_list  
+    h3 #{message.title}
+    p #{message.script}

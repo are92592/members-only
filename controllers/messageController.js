@@ -1,27 +1,44 @@
 var User = require('../models/user');
 var Message = require('../models/message');
-var mongoose = require('mongoose');
 const { body,validationResult } = require('express-validator');
+//var currentUser = app.useCurrentUser;
 
-/*
-exports.index = function(req, res, next) {
-    Message.find({}, 'date_and_time user title script')
+
+exports.index_default = function(req, res, next) {
+    Message.find({}, 'title script')
     .populate('user')
     .exec(function(err, list_messages) {
         if(err) { return next(err);}
+        //LocalStrategy.res.locals.currentUser = req.user;
+        //next();
         res.render('index', {title: 'Members Only Message Board', message_list: list_messages});
     });
 };
+
+exports.index = function(req, res, next) {
+    Message.find({}, 'title script')
+    .populate('user')
+    .exec(function(err, list_messages) {
+        if(err) { return next(err);}
+        //LocalStrategy.res.locals.currentUser = req.user;
+        //next();
+        res.render('index', {title: 'Members Only Message Board', message_list: list_messages, user: req.user});
+    });
+};
+//date_and_time user    //remember to put this back into the second .find parameter at some point 
+//, user: req.user.username  res.locals.currentUser
 
 //show message input page //get
 exports.create_message_get = function(req,res,next) {
     res.render('new-message', {title: 'New Message', title_label: 'Title'});
 };
 
+//
+
 //create new message //post
 exports.create_message_post= [
 
-    body('user', 'user must not be empty').trim().isLength({min:1}).escape(),
+   /* body('user', 'user must not be empty').trim().isLength({min:1}).escape(),*/
     body('title', 'title must not be empty').trim().isLength({min:1}).escape(),
     body('script', 'script must not be empty').trim().isLength({min:1}).escape(),
 
@@ -31,8 +48,8 @@ exports.create_message_post= [
 
         var message = new Message ({
             //date_and_time: new Date(), 
-            user: req.body.name,
-            title: req.body.title_label,
+            //user: req.body.name,
+            title: req.body.title,
             script: req.body.script
         });
 
@@ -42,7 +59,7 @@ exports.create_message_post= [
             .exec(function(err, results) {
                 if(err) { return next(err);}
 
-                res.render('new-message', {title: 'New Message', user: results.user, message: message, errors: errors.array()});
+                res.render('new-message', {title: 'New Message', /*user: results.user,*/ message: message, errors: errors.array()});
             });
             return;
         }
@@ -50,7 +67,7 @@ exports.create_message_post= [
         message.save(function (err) {
             if(err) {return next(err); }
 
-            res.redirect('/');
+            res.redirect('/messageboard');
         }); 
     }
     }
@@ -119,4 +136,3 @@ exports.edit_message_post= [
 //exports.edit_message_post('')
 
 //delete messsage 
-*/

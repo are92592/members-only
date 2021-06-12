@@ -1,24 +1,25 @@
 var User = require('../models/user');
-//var Message = require('../models/message');
+var Message = require('../models/message');
 var mongoose = require('mongoose');
 const { body,validationResult } = require('express-validator');
 const bcrypt = require("bcryptjs");
+var passport = require("passport");
 
 
 //show user signup page //get
 exports.sign_up_get = function(req, res, next) {
-    res.render("sign-up", {title: 'Sign Up'})
+    res.render("sign-up", {title: 'Sign Up'});
 }
 
 
 //create new user //post
-exports.sign_up_post =[ 
+exports.sign_up_post = [ 
 
     (req,res,next) => {
 
         const errors = validationResult(req);
 
-       /* if(!errors.isEmpty()) {
+       /* if(!errors.isEmpty()) { 
             res.render('sign-up-form', {title: 'Sign Up'});
             return;
         } else {
@@ -37,15 +38,30 @@ exports.sign_up_post =[
         user.save(function (err) {
             if(err) {return next(err); }
 
-            res.redirect('/');
+            res.redirect('/messageboard');
         })
-    });   
+    }); 
+
     }
 ];
 
-////log-in stuff
+exports.log_in_get = function(req,res,next) {
+    res.render("log-in", { user: req.user });
+}
 
 
+exports.log_in_post = function(req,res,next) {
+        //passport.authenticate("local"), 
+      
+       // function(req, res) {
+          res.redirect("/messageboard/" + req.user.username);
+        //}
+}
+
+exports.log_out = function(req,res) {
+    req.logout();
+    res.redirect("/messageboard/");
+  };
 
 
 /*

@@ -8,11 +8,14 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-//const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var boardRouter = require('./routes/messageboard');
 const user = require('./models/user');
+//const flash = require('express-flash');
+
+var Message = require('./models/message');
 
 const mongoDb = 'mongodb+srv://erhartica:Edmunds5@cluster0.neybr.mongodb.net/local_library?retryWrites=true&w=majority';
 mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true});
@@ -20,15 +23,9 @@ const db = mongoose.connection;
 
 db.on("error", console.error.bind(console, "mongo connection error"));
 
-/*const User = mongoose.model(
-  "User",
-  new Schema({
-    username: {type: String, required: true},
-    password: { type: String, required: true}
-  })
-);*/
+var User = user;
 
-const User = user;
+//const currentUser = req.user;
 
 var app = express();
 /*app.set('views', __dirname);
@@ -40,13 +37,12 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+//app.use(flash());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/', indexRouter);
-//app.use('/users', usersRouter);
-app.use('/messageboard', boardRouter);
 
+//process.env file
 app.use(session({secret: "cats", resave: false, saveUninitialized: true}));
 
 passport.use(
@@ -79,71 +75,32 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+
+//////
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 
-
-app.use(function(req,res, next) {
-  res.locals.currentUser = req.user;
-  next();
-});
-
-app.get("/", (req,res) => {
-  res.render("index", { user: req.user });
-});
-
-app.get("/log-in", (req,res) => {
-  res.render("log-in", { user: req.user });
-});
-
-
-/*
-app.get("/sign-up", (req, res) => 
-  res.render("sign-up"));
-*/
-
-///consider putting this in as a user controller
-/*app.post("/sign-up", (req,res, next) => {
-  bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-    const user = new User({
-      username: req.body.username,
-      password: hashedPassword,
-      membership_status: "silver",
-    }).save(err => {
-      if(err) {
-        return next(err);
-      };
-      res.redirect("/");
-    });
-  });
-});*/
-//var app = express();
-/*
-app.get("/log-in", (req, res) => {
-  res.render("log-in");
-});*/
-
-// view engine setup
-app.post(
-  "/log-in",
-  passport.authenticate("local", {
-    successRedirect:"/",
-    failureRedirect: "/"
-  })
-);
-
-app.get("/log-out", (req,res) => {
-  req.logout();
-  res.redirect("/");
-});
+app.use('/messageboard', boardRouter);
 
 
 let port = 3000;
 let host = "localhost";
 
 app.listen(port, host, () => console.log("app listening on "+ host + ":" + port));
+
+
+module.exports = app;
+
+
+
+
+
+
+
+
+
 
 /* start going thru passport creation and mongodb syncing, comment out other code if need be to test on browser*/
 
@@ -162,5 +119,3 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });*/
-
-module.exports = app;
