@@ -1,11 +1,12 @@
 var User = require('../models/user');
 var Message = require('../models/message');
 const { body,validationResult } = require('express-validator');
+var async = require('async');
 //var currentUser = app.useCurrentUser;
 
 
 exports.index_default = function(req, res, next) {
-    Message.find({}, 'title script')
+    Message.find({}, 'user title script')
     .populate('user')
     .exec(function(err, list_messages) {
         if(err) { return next(err);}
@@ -32,11 +33,19 @@ exports.index = function(req, res, next) {
 exports.create_message_get = function(req,res,next) {
     res.render('new-message', {title: 'New Message', title_label: 'Title'});
 };
-
+/*
 //
+exports.create_message_get = function(req,res,next) {
+    User.find({}, 'username')
+    .exec(function(err, user) {
+        if(err) { return next(err);}
+        res.render('new-message', {title: 'New Message', title_label: 'Title', user: user});
+    })
+    
+};*/
 
 //create new message //post
-exports.create_message_post= [
+exports.create_message_post = [
 
    /* body('user', 'user must not be empty').trim().isLength({min:1}).escape(),*/
     body('title', 'title must not be empty').trim().isLength({min:1}).escape(),
@@ -48,7 +57,7 @@ exports.create_message_post= [
 
         var message = new Message ({
             //date_and_time: new Date(), 
-            //user: req.body.name,
+            user: req.user,
             title: req.body.title,
             script: req.body.script
         });
@@ -59,7 +68,7 @@ exports.create_message_post= [
             .exec(function(err, results) {
                 if(err) { return next(err);}
 
-                res.render('new-message', {title: 'New Message', /*user: results.user,*/ message: message, errors: errors.array()});
+                res.render('new-message', {title: 'New Message', user: results.user, message: message, errors: errors.array()});
             });
             return;
         }
@@ -67,52 +76,149 @@ exports.create_message_post= [
         message.save(function (err) {
             if(err) {return next(err); }
 
-            res.redirect('/messageboard');
+            res.redirect('/messageboard/' + req.user.username);
         }); 
     }
     }
     
 ]
 
+exports.message_delete_get = function(req,res,next) {
+
+    async.parallel({
+        message: function(callback) {
+            Message.findById(req.body.messageid).exec(callback)
+        },
+        message_user: function(callback) {
+            User.find({'user': req.body.messageid}).exec(callback)
+        },
+    }, function(err, results) {
+        if(err) {
+            return next(err);
+        } else {
+            Message.findByIdAndRemove(req.body.messageid, function deleteMessage(err) {
+                if(err) {
+                    return next(err);
+                }
+                    res.redirect('/messageboard/' + req.user.username);
+                
+            })
+        }
+    }
+    )
+}
+
+exports.message_delete_post = function(req,res,next) {
+
+    async.parallel({
+        message: function(callback) {
+            Message.findById(req.body.messageid).exec(callback)
+        },
+        message_user: function(callback) {
+            User.find({'user': req.body.messageid}).exec(callback)
+        },
+    }, function(err, results) {
+        if(err) {
+            return next(err);
+        } else {
+            Message.findByIdAndRemove(req.body.messageid, function deleteMessage(err) {
+                if(err) {
+                    return next(err);
+                }
+                    //res.redirect('/messageboard/' + req.user.username);
+                
+            })
+        }
+    }
+    )
+}
+
+
+
+
+/* 
+
+try using a version of the below function but without the async parallel nor with the user included
+
+*/
+exports.edit_message_get = function(req,res,next) {
+    res.render('new-message', {title: 'New Message', title_label: 'Title'});
+};
+
+/*
+exports.edit_message_get = function(req,res,next) {
+            Message.findById(req.params.id).exec(function(err, message) {
+            if(err) {return next(err);}
+            res.render('new-message',{title: 'Edit this Message', title_label: 'Title', script: "What's now on your mind?", message: message});
+        })
+};*/
+
+/*
 //edit message page //get
 exports.edit_message_get = function(req,res,next) {
     async.parallel({
         message:function(callback) {
-            Message.findById(req.params.id).populate('category').exec(callback)
+            Message.findById(req.params.id).populate('user').exec(callback)
         },
         user: function(callback) {
             User.find(callback)
         },
         }, function(err, results) {
             if(err) {return next(err);}
-            if(results.mesage ==null) {
-                var err = new Error('No Category');
+            if(results.message ==null) {
+                var err = new Error('No User');
                 err.status = 404;
                 return next(err);
-            }
-            res.render('new-message',{title: 'Edit this Message', title_label: 'Title', script: "What's now on your mind?"});
+            } 
+            res.render('new-message',{title: 'Edit this Message', title_label: 'Title', script: "What's now on your mind?", user: results.message.user._id.username, message:results.message});
         })
 }
+*/
 
 exports.edit_message_post= [
 
-    body('user', 'user must not be empty').trim().isLength({min:1}).escape(),
-    body('title', 'title must not be empty').trim().isLength({min:1}).escape(),
-    body('script', 'script must not be empty').trim().isLength({min:1}).escape(),
+    //body('user', 'user must not be empty').trim().isLength({min:1}).escape(),
+     body('title', 'title must not be empty').trim().isLength({min:1}).escape(),
+     body('script', 'script must not be empty').trim().isLength({min:1}).escape(),
 
-    (req, res, next) => {
+     (req, res, next) => {
 
         const errors = validationResult(req);
 
-        var message = new Message(
-            {
-                //date_and_time: new Date(), 
-                user: req.body.name,
-                title: req.body.title_label,
-                script: req.body.script
-            });
+        
+            if(!errors.isEmpty()) {
+                User.find({}, 'name')
+                .exec(function(err, results) {
+                    if(err) { return next(err);}
+    
+                    res.render('new-message', {title: "edit this message", user: results.user, message: message, errors: errors.array()});
+                });
+                return;
+            }
+            else {
+                var message = new Message(
+                    {
+                        //date_and_time: new Date(), 
+                        user: req.user, //
+                        title: req.body.title,
+                        script: req.body.script,
+                        _id: req.params.messageid
+                    });
+            Message.findByIdAndUpdate(req.params.messageid, message, { new: true }, function(err, newmessage) {
+                if(err) { return next(err); } 
+                
+                res.redirect('/messageboard/' + req.user.username + "/");
+            }); 
+        }
+    }
+]
 
-        if(!errors.isEmpty()) {
+
+
+   //}, newmessage
+       
+
+       /*if(!errors.isEmpty()) {
             User.find({}, 'name')
             .exec(function(err, results) {
                 if(err) { return next(err);}
@@ -121,15 +227,7 @@ exports.edit_message_post= [
             });
             return;
         }
-        else {
-        Message.findByIdAndUpdate(req.params.id, message, {}, function(err, newmessage) {
-            if(err) {return next(err); }
-            res.redirect('/');
-        }); 
-    }
-    }
-    
-]
+        else {*/
    
 
 //edit message //post

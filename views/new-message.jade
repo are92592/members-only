@@ -1,15 +1,15 @@
 extends layout
 body
 block content
-    h1= title
+    h1= title 
 
     form(method='POST' action='')
         div.form-group
         label(for='post-title') Title:
-        input#title.form-control(type='text', placeholder='Title' name='title' required='true' value=(undefined===title ? '' :  message.title) )
+        input#title.form-control(type='text', placeholder='Title' name='title' required='true' value='message-title' )
         div.form-group
         label(for='script') Script:
-        input#title.form-control(type='text', placeholder='Script' name='script' required='true' value=(undefined===script ? '' : message.script) )
+        input#title.form-control(type='text', placeholder='Script' name='script' required='true' value='script' )
         
         button.btn.btn-primary(type='submit') Submit
 
@@ -17,3 +17,8 @@ block content
         ul
         for error in errors
             li!= error.msg
+
+
+
+            //(undefined===title ? '' :  message.title)
+            //(undefined===script ? '' : message.script)

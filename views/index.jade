@@ -6,10 +6,17 @@ block content
     p Welcome to #{title}
     if user
       h1 Welcome back #{user.username}
-      a(href="/log-out") Log Out
+      a(href="/messageboard/log-out") Log Out
     else    
       a(href="/messageboard/log-in") Log in
 
   each message in message_list  
+    if user && user.id === message.user.id
+      a(href="/messageboard/" + user.username + "/" + message.id + "/edit-message") Edit 
+      a(href="/messageboard/" + user.username + "/" + message.id + "/delete") Delete 
     h3 #{message.title}
+    if user
+      h3 #{message.user.username}
+    else 
+      h3 messageboard member
     p #{message.script}
