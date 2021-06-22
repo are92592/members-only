@@ -1,8 +1,10 @@
 extends layout
-block content
+block content 
 
-    form(method="POST" action="")
+    h1 #{title}
+
+    form(method='POST' action='')
       div.form-group
-        h1 Delete Message?
-    button.btn.btn-primary(type="submit") Confirm Delete
+        input#messageid.form-control(type="hidden", name="messageid", required="true", value=message._id)
+      button.btn.btn-primary(type="submit") Confirm Delete
     

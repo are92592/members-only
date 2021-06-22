@@ -87,26 +87,19 @@ exports.message_delete_get = function(req,res,next) {
 
     async.parallel({
         message: function(callback) {
-            Message.findById(req.body.messageid).exec(callback)
+            Message.findById(req.params.messageid).exec(callback)
         },
         message_user: function(callback) {
-            User.find({'user': req.body.messageid}).exec(callback)
+            User.find({'message': req.params.messageid}).exec(callback)
         },
     }, function(err, results) {
         if(err) {
             return next(err);
-        } else {
-            Message.findByIdAndRemove(req.body.messageid, function deleteMessage(err) {
-                if(err) {
-                    return next(err);
-                }
-                    res.redirect('/messageboard/' + req.user.username);
+        } 
+            res.render('delete', {title: "Delete this Message?", message: results.message, message_user: results.message_user});
                 
-            })
-        }
-    }
-    )
-}
+            });
+    };
 
 exports.message_delete_post = function(req,res,next) {
 
@@ -120,17 +113,21 @@ exports.message_delete_post = function(req,res,next) {
     }, function(err, results) {
         if(err) {
             return next(err);
-        } else {
+        } 
+        /*if(results.message_user) 
+            {res.render('delete', {title: "Delete this Message?", message: results.message, message_user: results.message_user});
+            return;
+        }*/
+        else {
             Message.findByIdAndRemove(req.body.messageid, function deleteMessage(err) {
                 if(err) {
                     return next(err);
                 }
-                    //res.redirect('/messageboard/' + req.user.username);
+                    res.redirect('/messageboard/' + req.user.username);
                 
             })
         }
-    }
-    )
+    })
 }
 
 
