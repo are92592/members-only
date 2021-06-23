@@ -1,15 +1,16 @@
 extends layout
 
 block content
-  h1= message
+  h2.className#logInFormTitle Log In
   body  
-    form(method='POST' action='log-in')
+   form.className#loginFormContainer(method='POST' action='log-in')
+    form.className#loginForm
         div.form-group
-          label(for='username') Username:
-          input#title.form-control(type='text', placeholder='Username' name='username' required='true' value=(undefined===username ? '' :  user.username) )
+          label(for='username') Username:   
+          input#title.form-control(type='text', placeholder='Username' length=5 name='username' required='true' value=(undefined===username ? '' :  user.username) )
         div.form-group
           label(for='password') Password:
-          input#title.form-control(type='text', placeholder='Password' name='password' required='true' value=(undefined===password ? '' : user.password) )
+          input#title.form-control(type='password', placeholder='Password' name='password' required='true' value=(undefined===password ? '' : user.password) )
         
         button.btn.btn-primary(type='submit') Submit
 

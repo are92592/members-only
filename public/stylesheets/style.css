@@ -2,19 +2,234 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: black;
+  
 }
 
 a {
   color: #00B7FF;
 }
 
+#Content {
+  position: relative;
+  top: 50px;
+}
+
+#messageContainer {
+  background-color: black;
+  padding: 40px;
+}
+
 #message {
   background-color: rgb(31, 31, 56);
+  border: 1px solid rgb(100, 138, 156);
   border-radius: 15px;
-
 }
 
 #messageScript {
   color: #fff;
   padding: 15px;
+}
+
+#headerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border-top: 1px solid rgb(100, 138, 156);
+  border-bottom: 1px solid rgb(100, 138, 156);
+  border-right: 1px solid rgb(100, 138, 156);
+  border-left: 1px solid rgb(100, 138, 156);
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  padding: 20px;
+}
+
+#UserHeader {
+  color: #fff;
+}
+
+#indexTitleContainer {
+  display: flex;
+  justify-content: space-around;
+}
+
+#indexTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  color: rgb(100, 138, 156);
+}
+
+#LogInBtnContainer {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  padding: 20px;
+  height: 100px;
+}
+
+#LogInBtn {
+  border: 1px solid #000000;
+  border-radius: 5px;
+  width: 205px;
+  height: 75px;
+  padding: 9px;
+  display: flex;
+  flex-direction: row;
+}
+
+
+#LogInBtn:hover {
+  background-color: rgb(100, 138, 156);
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+#LGBTNTitle:hover {
+  color: #00B7FF;
+}
+
+
+#SignUpBtnContainer {
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  padding: 20px;
+  height: 100px;
+}
+
+#SignUpBtn {
+  border: 1px solid #000000;
+  border-radius: 5px;
+  width: 205px;
+  height: 75px;
+  padding: 9px;
+  display: flex;
+  flex-direction: row;
+}
+
+#newMsg {
+  display: flex;
+  flex-direction: row;
+}
+
+#LOcontainer {
+  display: flex;
+  flex-direction: row;
+}
+
+#SignUpBtn:hover {
+  background-color: rgb(100, 138, 156);
+}
+
+#SUBTNTitle:hover {
+  color: #00B7FF;
+}
+
+
+#ToolsList {
+  display: flex;
+  flex-direction: row;
+  padding-left: 15px;
+  padding-top: 15px;
+}
+
+#ToolsListEdit {
+  padding-left: 0px;
+}
+
+#messageInfoContainer {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px 15px 0px 15px;
+}
+
+#TitleNameContainer {
+  display:flex;
+  flex-direction: row;
+  width: 800px;
+}
+
+#messageTitle {
+  color : rgb(100, 138, 156);
+  max-width: 400px;
+}
+
+#messageDate {
+  color : rgb(100, 138, 156);
+
+}
+
+#messageUser {
+  color: rgb(100, 138, 156);
+  position: relative;
+  padding-left: 10px;
+}
+
+#loginForm {
+  max-width: 800px;
+}
+
+#loginFormContainer {
+  padding: 20px;
+  padding-bottom: 30px;
+  border-top: 5px solid rgb(100, 138, 156);
+  border-bottom: 5px solid rgb(100, 138, 156);
+  border-right: 5px solid rgb(100, 138, 156);
+  border-left: 5px solid rgb(100, 138, 156);
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  max-width: 900px;
+}
+
+#logInFormTitle {
+  color: rgb(100, 138, 156);
+} 
+
+#signupFormTitle {
+  color: rgb(100, 138, 156);
+}
+
+#signupForm {
+  max-width: 800px;
+}
+
+#signupFormContainer {
+  padding: 20px;
+  padding-bottom: 30px;
+  border-top: 5px solid rgb(100, 138, 156);
+  border-bottom: 5px solid rgb(100, 138, 156);
+  border-right: 5px solid rgb(100, 138, 156);
+  border-left: 5px solid rgb(100, 138, 156);
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  max-width: 900px;
+}
+
+label {
+  color: #00B7FF;
+}
+
+.btn-primary {
+  border-top: 5px solid rgb(100, 138, 156);
+  border-bottom: 5px solid rgb(100, 138, 156);
+  border-right: 5px solid rgb(100, 138, 156);
+  border-left: 5px solid rgb(100, 138, 156);
+  background-color: black;
+}
+
+.btn-primary:hover {
+  border-top: 5px solid rgb(100, 138, 156);
+  border-bottom: 5px solid rgb(100, 138, 156);
+  border-right: 5px solid rgb(100, 138, 156);
+  border-left: 5px solid rgb(100, 138, 156);
+  background-color: rgb(100, 138, 156);
 }

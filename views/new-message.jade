@@ -6,10 +6,10 @@ block content
     form(method='POST' action='')
         div.form-group
         label(for='post-title') Title:
-        input#title.form-control(type='text', placeholder='Title' name='title' required='true' value='message-title' )
+        input#title.form-control(type='text', placeholder='Title' name='title' required='true' value= (undefined===message ? '' : message.title))
         div.form-group
         label(for='script') Script:
-        input#title.form-control(type='text', placeholder='Script' name='script' required='true' value='script' )
+        textarea#title.form-control(type='text', placeholder='Script' name='script' required='true' value=(undefined===message ? '' : message.script) )
         
         button.btn.btn-primary(type='submit') Submit
 

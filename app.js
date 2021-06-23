@@ -7,19 +7,25 @@ var logger = require('morgan');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var boardRouter = require('./routes/messageboard');
 const user = require('./models/user');
-//const flash = require('express-flash');
+const flash = require('express-flash'); ////
 
 var Message = require('./models/message');
 
 const mongoDb = 'mongodb+srv://erhartica:Edmunds5@cluster0.neybr.mongodb.net/local_library?retryWrites=true&w=majority';
+
+///finalize the visual layout
+///change how errors are displayed
+///figure out what's really needed in the controller functions
+///figure out why appostrophies are going thru as hexidecimals
+
+
+//const mongoDb = 'mongodb+srv://erhartica:Edmunds5@cluster0.neybr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+
 mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true});
-const db = mongoose.connection;
+var db = mongoose.connection;
 
 db.on("error", console.error.bind(console, "mongo connection error"));
 

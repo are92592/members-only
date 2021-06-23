@@ -8,7 +8,7 @@ var passport = require("passport");
 
 //show user signup page //get
 exports.sign_up_get = function(req, res, next) {
-    res.render("sign-up", {title: 'Sign Up'});
+    res.render("sign-up", {title: 'Sign Up', user: req.user});
 }
 
 
@@ -19,26 +19,24 @@ exports.sign_up_post = [
 
         const errors = validationResult(req);
 
-       /* if(!errors.isEmpty()) { 
-            res.render('sign-up-form', {title: 'Sign Up'});
-            return;
-        } else {
 
-        }*/
 
         bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
         const user = new User(
             {
-                /*first_name: req.body.first_name,
-                last_name: req.body.last_name,*/
                 username: req.body.username,
                 password: hashedPassword,
                 membership_status: "silver",
             });
-        user.save(function (err) {
-            if(err) {return next(err); }
 
-            res.redirect('/messageboard');
+            if(user.username === "admin554") {
+                user.membership_status = "gold";
+            }
+
+        user.save(function (err) {
+            if(err || req.body.password !== req.body.passwordConfirm) {return next(err); }
+
+            res.redirect('/messageboard/');
         })
     }); 
 
@@ -51,11 +49,7 @@ exports.log_in_get = function(req,res,next) {
 
 
 exports.log_in_post = function(req,res,next) {
-        //passport.authenticate("local"), 
-      
-       // function(req, res) {
           res.redirect("/messageboard/" + req.user.username);
-        //}
 }
 
 exports.log_out = function(req,res) {
@@ -64,19 +58,30 @@ exports.log_out = function(req,res) {
   };
 
 
-/*
-//change user status input //get
-exports.become_an_admin('/become-an-admin', (req,res,next) => {
-    res.render('become-an-admin', {title: 'Become an Admin!'})
+////////////
 
-    
-})
+exports.edit_user_get = function(req, res) {
+    res.render("edit-user", {title: "Upgrade status to platinum, and write and edit your posts"});
+}
 
-//change user status //post
-exports.become_an_admin('/become-an-admin', (req,res,next) => {
-    if(!error) {
-        req.user.id.membership_status = "gold";
+exports.edit_user_post = function(req,res) {
+    if(req.body.password === "password12345") {
+        var user = new User({
+            name: req.user.name, ///
+            password: req.user.password,
+            membership_status: "platinum",
+            _id : req.user.id,
+        })
     }
-})
 
-*/
+    User.findByIdAndUpdate(req.user.id, user, { new: true },  function(err, updatedmember) {
+        if(err) {
+            return next(err);
+        } else {
+            res.redirect("/messageboard/" + req.params.username);
+        }
+    })
+}
+
+
+
