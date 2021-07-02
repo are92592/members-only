@@ -9,7 +9,7 @@ block content
         input#title.form-control(type='text', placeholder='Title' name='title' required='true' value= (undefined===message ? '' : message.title))
         div.form-group
         label(for='script') Script:
-        textarea#title.form-control(type='text', placeholder=(undefined===message ? '' : message.script) name='script' required='true' value=(undefined===message ? '' : message.script))
+        textarea#title.form-control(type='text', placeholder=(undefined===message ? '' : message.script) name='script' required='true' textarea=(undefined===message ? '' : message.script))
         
         button.btn.btn-primary(type='submit') Submit
 
@@ -20,5 +20,4 @@ block content
 
 
 
-            //(undefined===title ? '' :  message.title)
-            //(undefined===script ? '' : message.script)
+ 

@@ -7,16 +7,7 @@ var UserSchema = new Schema({
     membership_status:{type:String, required:true},
 })
 
-/*
-UserSchema.virtual('name').get(function() {
-    return first_name + last_name;
-});*/
 
 module.exports = mongoose.model('User', UserSchema);
 
-
-/* 
- first_name: {type: String, required:true, maxLength: 50},
-    last_name: {type:String, required:true, maxLength: 50},
-*/
 

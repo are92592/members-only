@@ -88,7 +88,7 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 
-app.use('/messageboard', boardRouter);
+app.use(boardRouter);
 
 
 let port = 3000;

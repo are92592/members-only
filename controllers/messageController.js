@@ -4,12 +4,10 @@ const { body,validationResult } = require('express-validator');
 var async = require('async');
 
 exports.index_default = function(req, res, next) {
-    Message.find({}, 'user title dae script')
+    Message.find({}, 'user title date script')
     .populate('user')
     .exec(function(err, list_messages) {
         if(err) { return next(err);}
-        //LocalStrategy.res.locals.currentUser = req.user;
-        //next();
         res.render('index', {title: 'Members Only Message Board', message_list: list_messages});
     });
 };
@@ -19,19 +17,16 @@ exports.index = function(req, res, next) {
     .populate('user')
     .exec(function(err, list_messages) {
         if(err) { return next(err);}
-        //LocalStrategy.res.locals.currentUser = req.user;
-        //next();
-        res.render('index', {title: 'Members Only Message Board', message_list: list_messages, user: req.user});
+            res.render('index', {title: 'Members Only Message Board', message_list: list_messages, user: req.user});
     });
 };
 
-//show message input page //get
+
 exports.create_message_get = function(req,res,next) {
     res.render('new-message', {title: 'New Message', title_label: 'Title'});
 };
 
 
-//create new message //post
 exports.create_message_post = [
 
     body('title', 'title must not be empty').trim().isLength({min:1}).escape(),
@@ -43,8 +38,6 @@ exports.create_message_post = [
 
         let date = new Date();
 
-        //let dateArray = [date.getMonth, date.getDay, date.getYear];
-
         let dateString = date.toDateString();
 
         var message = new Message ({
@@ -54,7 +47,6 @@ exports.create_message_post = [
             script: req.body.script
         });
 
-        ///for preliminary testing purposes, comment this out until user creation exists
         if(!errors.isEmpty()) {
             User.find({}, 'name')
             .exec(function(err, results) {
@@ -68,7 +60,7 @@ exports.create_message_post = [
         message.save(function (err) {
             if(err) {return next(err); }
 
-            res.redirect('/messageboard/' + req.user.username);
+            res.redirect('/' + req.user.username);
         }); 
     }
     }
@@ -94,8 +86,6 @@ exports.message_delete_get = function(req,res,next) {
     };
 
 
-    //function --> message.find... --> callback resulting from mesage.find... --> callback resulting from function
-
 exports.message_delete_post = function(req,res,next) { 
 
     async.parallel({
@@ -109,29 +99,19 @@ exports.message_delete_post = function(req,res,next) {
         if(err) {
             return next(err);
         } 
-        /*if(results.message_user) 
-            {res.render('delete', {title: "Delete this Message?", message: results.message, message_user: results.message_user});
-            return;
-        }*/
+
         else {
             Message.findByIdAndRemove(req.body.messageid, function deleteMessage(err) {
                 if(err) {
                     return next(err);
                 }
-                    res.redirect('/messageboard/' + req.user.username);   
+                    res.redirect('/' + req.user.username);   
             })
         }
     })
 }
 
 
-
-
-/* 
-
-try using a version of the below function but without the async parallel nor with the user included
-
-*/
 exports.edit_message_get = function(req,res,next) {
     Message.findById(req.params.messageid).exec(function(err, message) {
         if(err) { return next(err);} 
@@ -143,7 +123,6 @@ exports.edit_message_get = function(req,res,next) {
 
 exports.edit_message_post= [
 
-    //body('user', 'user must not be empty').trim().isLength({min:1}).escape(),
      body('title', 'title must not be empty').trim().isLength({min:1}).escape(),
      body('script', 'script must not be empty').trim().isLength({min:1}).escape(),
 
@@ -164,7 +143,6 @@ exports.edit_message_post= [
             else {
                 var message = new Message(
                     {
-                        //date_and_time: new Date(), 
                         user: req.user, //
                         title: req.body.title,
                         script: req.body.script,
@@ -173,7 +151,7 @@ exports.edit_message_post= [
             Message.findByIdAndUpdate(req.params.messageid, message, { new: true }, function(err, newmessage) {
                 if(err) { return next(err); } 
                 
-                res.redirect('/messageboard/' + req.user.username + "/");
+                res.redirect('/' + req.user.username + "/");
             }); 
         }
     }
@@ -181,57 +159,3 @@ exports.edit_message_post= [
 
 
 
-
-/*
-exports.edit_message_get = function(req,res,next) {
-            Message.findById(req.params.id).exec(function(err, message) {
-            if(err) {return next(err);}
-            res.render('new-message',{title: 'Edit this Message', title_label: 'Title', script: "What's now on your mind?", message: message});
-        })
-};*/
-
-/*
-//edit message page //get
-exports.edit_message_get = function(req,res,next) {
-    async.parallel({
-        message:function(callback) {
-            Message.findById(req.params.id).populate('user').exec(callback)
-        },
-        user: function(callback) {
-            User.find(callback)
-        },
-        }, function(err, results) {
-            if(err) {return next(err);}
-            if(results.message ==null) {
-                var err = new Error('No User');
-                err.status = 404;
-                return next(err);
-            } 
-            res.render('new-message',{title: 'Edit this Message', title_label: 'Title', script: "What's now on your mind?", user: results.message.user._id.username, message:results.message});
-        })
-}
-*/
-
-
-
-
-
-   //}, newmessage
-       
-
-       /*if(!errors.isEmpty()) {
-            User.find({}, 'name')
-            .exec(function(err, results) {
-                if(err) { return next(err);}
-
-                res.render('new-message', {title: 'New Message', user: results.user, message: message, errors: errors.array()});
-            });
-            return;
-        }
-        else {*/
-   
-
-//edit message //post
-//exports.edit_message_post('')
-
-//delete messsage 
