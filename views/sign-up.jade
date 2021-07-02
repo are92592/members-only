@@ -1,7 +1,7 @@
 extends layout
 body
 block content
-    h2.className#signupFormTitle Sign Up
+    h3.className#signupFormTitle Sign Up
     form.className#signupFormContainer(method='POST' action='sign-up')
       form.className#signupForm
         div.form-group
@@ -10,10 +10,11 @@ block content
         div.form-group
         label(for='password') Password:
         input#title.form-control(type='password', placeholder='Password' name='password' required='true' value=(undefined===password ? '' : user.password) )
+        div.form-group
         label(for='confirm-password') Confirm Password:
-        input#title.form-control(type='password', placeholder='Password' name='passwordConfirm' required='true' value=(undefined===password ? '' : user.password) )
+        input#title.form-control(type='password', placeholder='Confirm Password' name='passwordConfirm' required='true' value=(undefined===password ? '' : user.password) )
         
-        button.btn.btn-primary(type='submit') Submit
+        button.btn.btn-secondary(type='submit') Submit
 
     if errors
         ul
