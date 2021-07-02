@@ -1,8 +1,6 @@
 var User = require('../models/user');
 const { validationResult } = require('express-validator');
 const bcrypt = require("bcryptjs");
-var passport = require("passport");
-
 
 exports.sign_up_get = function(req, res, next) {
     res.render("sign-up", {title: 'Sign Up', user: req.user});
@@ -15,8 +13,6 @@ exports.sign_up_post = [
 
         const errors = validationResult(req);
 
-
-
         bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
         const user = new User(
             {
@@ -25,7 +21,7 @@ exports.sign_up_post = [
                 membership_status: "silver",
             });
 
-            if(user.username === "admin554") {
+            if(user.username === process.env.ADMIN_NAME) {
                 user.membership_status = "gold";
             }
 
@@ -61,7 +57,7 @@ exports.edit_user_get = function(req, res) {
 exports.edit_user_post = function(req,res) {
     if(req.body.password === "password12345") {
         var user = new User({
-            name: req.user.name, ///
+            name: req.user.name, 
             password: req.user.password,
             membership_status: "platinum",
             _id : req.user.id,
